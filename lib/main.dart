@@ -46,12 +46,13 @@ class SensorApp extends StatelessWidget {
 
                 final event = snapshot.data!;
                 // x, y, z의 의미는 센서마다 달라서 문서를 보고 파악해야함
+                // 순서대로 x가 0번째 y가 1번째
                 List<double> accelerometerValues = [event.x, event.y, event.z];
                 print(accelerometerValues);
 
                 return Positioned(
-                  left: centerX,
-                  top: centerY,
+                  left: centerX + event.y * 50,
+                  top: centerY + event.x * 10,
                   child: Container(
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
