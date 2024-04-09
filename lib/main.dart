@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,18 +29,34 @@ class SensorApp extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned(
-            left: centerX,
-            top: centerY,
-            child: Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.red,
-              ),
-              width: 100,
-              height: 100,
-            ),
-          )
+          StreamBuilder<AccelerometerEvent>(
+              stream: accelerometerEventStream(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  // data가 없는 경우 로딩표시
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                final event = snapshot.data!;
+                // x, y, z의 의미는 센서마다 달라서 문서를 보고 파악해야함
+                List<double> accelerometerValues = [event.x, event.y, event.z];
+                print(accelerometerValues);
+
+                return Positioned(
+                  left: centerX,
+                  top: centerY,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red,
+                    ),
+                    width: 100,
+                    height: 100,
+                  ),
+                );
+              })
         ],
       ),
     );
